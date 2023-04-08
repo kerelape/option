@@ -49,7 +49,7 @@ func TestOption_SomeIsNotEmpty(t *testing.T) {
 // TestOption_ReturnsCorrectValue tests that an Option with value returns it correctly.
 func TestOption_ReturnsCorrectValue(t *testing.T) {
 	want := rand.Float64()
-	subject := option.Some(&want)
+	subject := option.Some(want)
 	actual := subject.Value()
 	if actual != want {
 		t.Errorf("Expected %f, got %f", want, actual)

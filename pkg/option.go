@@ -31,8 +31,8 @@ func None[T any]() Option[T] {
 }
 
 // Some returns an Option with value.
-func Some[T any](value *T) Option[T] {
-	return Option[T]{value}
+func Some[T any](value T) Option[T] {
+	return Option[T]{&value}
 }
 
 // Empty returns true if the Option is empty.
