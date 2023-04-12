@@ -23,32 +23,10 @@
 package option
 
 // Option is an optional value.
-type Option[T any] [1]*T
+type Option[T any] interface {
+	// Present returns true in case it contains a value.
+	Present() bool
 
-// None returns an empty Option.
-func None[T any]() Option[T] {
-	return Option[T]{nil}
-}
-
-// Some returns an Option with value.
-func Some[T any](value T) Option[T] {
-	return Option[T]{&value}
-}
-
-// Empty returns true if the Option is empty.
-func (p Option[T]) Empty() bool {
-	return p[0] == nil
-}
-
-// Empty returns true if the Option has a value.
-func (p Option[T]) NotEmpty() bool {
-	return !p.Empty()
-}
-
-// Value returns the value stored in the Option.
-func (p Option[T]) Value() T {
-	if p.Empty() {
-		panic("option is empty")
-	}
-	return *p[0]
+	// Value returns the value stored in this option.
+	Value() T
 }
