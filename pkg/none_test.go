@@ -20,13 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package option
+package option_test
 
-// Option is an optional value.
-type Option[T any] interface {
-	// Present returns true in case it contains a value.
-	Present() bool
+import (
+	"errors"
+	"testing"
 
-	// Value returns the value stored in this option.
-	Value() T
+	option "github.com/kerelape/option/pkg"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestNone_Present(t *testing.T) {
+	assert.Equal(
+		t,
+		false,
+		option.NewNone[any]().Present(),
+		"Present is expected to always return false.",
+	)
+}
+
+func TestNone_Value(t *testing.T) {
+	t.Run("without reason", func(t *testing.T) {
+		assert.Panics(
+			t,
+			func() {
+				option.NewNone[any]().Value()
+			},
+			"Value is expected to panic.",
+		)
+	})
+	t.Run("with reason", func(t *testing.T) {
+		err := errors.New("because I want so")
+		assert.PanicsWithError(
+			t,
+			errors.Join(option.ErrNoValue, err).Error(),
+			func() {
+				option.NewNoneReason[any](err).Value()
+			},
+			"Value must panic with the error passed as reason",
+		)
+	})
 }

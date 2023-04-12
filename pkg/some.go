@@ -20,38 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package option_test
+package option
 
-import (
-	"math/rand"
-	"testing"
-
-	option "github.com/kerelape/option/pkg"
-)
-
-// TestOption_NoneIsEmpty tests that None returns an empty Option.
-func TestOption_NoneIsEmpty(t *testing.T) {
-	subject := option.None[any]()
-	if subject.NotEmpty() {
-		t.Error("Expected None to be empty")
-	}
+// Some is an Option with some value.
+type Some[T any] struct {
+	value *T
 }
 
-// TestOption_SomeIsNotEmpty tests that Some returns not an empty Option.
-func TestOption_SomeIsNotEmpty(t *testing.T) {
-	v := 0
-	subject := option.Some(&v)
-	if subject.Empty() {
-		t.Error("Expected Some to have a value")
-	}
+// NewSome creates a new Some.
+func NewSome[T any](value T) Some[T] {
+	return Some[T]{&value}
 }
 
-// TestOption_ReturnsCorrectValue tests that an Option with value returns it correctly.
-func TestOption_ReturnsCorrectValue(t *testing.T) {
-	want := rand.Float64()
-	subject := option.Some(want)
-	actual := subject.Value()
-	if actual != want {
-		t.Errorf("Expected %f, got %f", want, actual)
-	}
+func (s Some[T]) Present() bool {
+	return true
+}
+
+func (s Some[T]) Value() T {
+	return *s.value
 }

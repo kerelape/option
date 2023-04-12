@@ -20,13 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package option
+package option_test
 
-// Option is an optional value.
-type Option[T any] interface {
-	// Present returns true in case it contains a value.
-	Present() bool
+import (
+	"testing"
 
-	// Value returns the value stored in this option.
-	Value() T
+	option "github.com/kerelape/option/pkg"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestSome_Present(t *testing.T) {
+	assert.True(
+		t,
+		option.NewSome("Hello, World!").Present(),
+		"Present is expected to return true.",
+	)
+}
+
+func TestSome_Value(t *testing.T) {
+	assert.Equal(
+		t,
+		"Hello, World!",
+		option.NewSome("Hello, World!").Value(),
+		"Value is expected to return the value of Some.",
+	)
 }

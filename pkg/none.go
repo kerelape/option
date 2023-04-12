@@ -22,11 +22,31 @@
 
 package option
 
-// Option is an optional value.
-type Option[T any] interface {
-	// Present returns true in case it contains a value.
-	Present() bool
+import (
+	"errors"
+)
 
-	// Value returns the value stored in this option.
-	Value() T
+var ErrNoValue = errors.New("no value present")
+
+// None is an Option without a value.
+type None[T any] struct {
+	reason error // reason why the option has no value.
+}
+
+// NewNoneReason creates a new None with reason.
+func NewNoneReason[T any](reason error) None[T] {
+	return None[T]{reason}
+}
+
+// NewNone creates a new None without any reason.
+func NewNone[T any]() None[T] {
+	return NewNoneReason[T](nil)
+}
+
+func (n None[T]) Present() bool {
+	return false
+}
+
+func (n None[T]) Value() T {
+	panic(errors.Join(ErrNoValue, n.reason))
 }
