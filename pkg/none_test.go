@@ -23,35 +23,41 @@
 package option_test
 
 import (
-	"math/rand"
+	"errors"
 	"testing"
 
 	option "github.com/kerelape/option/pkg"
+	"github.com/stretchr/testify/assert"
 )
 
-// TestOption_NoneIsEmpty tests that None returns an empty Option.
-func TestOption_NoneIsEmpty(t *testing.T) {
-	subject := option.None[any]()
-	if subject.NotEmpty() {
-		t.Error("Expected None to be empty")
-	}
+func TestNone_Present(t *testing.T) {
+	assert.Equal(
+		t,
+		false,
+		option.NewNone[any]().Present(),
+		"Present is expected to always return false.",
+	)
 }
 
-// TestOption_SomeIsNotEmpty tests that Some returns not an empty Option.
-func TestOption_SomeIsNotEmpty(t *testing.T) {
-	v := 0
-	subject := option.Some(&v)
-	if subject.Empty() {
-		t.Error("Expected Some to have a value")
-	}
-}
-
-// TestOption_ReturnsCorrectValue tests that an Option with value returns it correctly.
-func TestOption_ReturnsCorrectValue(t *testing.T) {
-	want := rand.Float64()
-	subject := option.Some(want)
-	actual := subject.Value()
-	if actual != want {
-		t.Errorf("Expected %f, got %f", want, actual)
-	}
+func TestNone_Value(t *testing.T) {
+	t.Run("without reason", func(t *testing.T) {
+		assert.Panics(
+			t,
+			func() {
+				option.NewNone[any]().Value()
+			},
+			"Value is expected to panic.",
+		)
+	})
+	t.Run("with reason", func(t *testing.T) {
+		err := errors.New("because I want so")
+		assert.PanicsWithError(
+			t,
+			errors.Join(option.ErrNoValue, err).Error(),
+			func() {
+				option.NewNoneReason[any](err).Value()
+			},
+			"Value must panic with the error passed as reason",
+		)
+	})
 }
