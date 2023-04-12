@@ -48,5 +48,5 @@ func (n None[T]) Present() bool {
 }
 
 func (n None[T]) Value() T {
-	panic(errors.Join(ErrNoValue, n.reason))
-}
+	panic(errors.Join(ErrNoValue, n.reason)) //nolint:vet
+} //nolint:vet
