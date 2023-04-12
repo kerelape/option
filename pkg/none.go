@@ -46,12 +46,11 @@ func NewNone[T any]() None[T] {
 func (n None[T]) Present() bool {
 	return false
 }
-func (n None[T]) Value() T {
-	dummy, _ := any(nil).(T)
+
+func (n None[T]) Value() (_ T) {
 	if n.reason != nil {
 		panic(n.reason)
 	} else {
 		panic(ErrNoValue)
 	}
-	return dummy
 }
