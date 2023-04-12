@@ -47,6 +47,10 @@ func (n None[T]) Present() bool {
 	return false
 }
 
-func (n None[T]) Value() T {
-	panic(errors.Join(ErrNoValue, n.reason))
+func (n None[T]) Value() (_ T) {
+	if n.reason != nil {
+		panic(n.reason)
+	} else {
+		panic(ErrNoValue)
+	}
 }

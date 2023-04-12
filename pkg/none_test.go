@@ -40,6 +40,7 @@ func TestNone_Present(t *testing.T) {
 }
 
 func TestNone_Value(t *testing.T) {
+
 	t.Run("without reason", func(t *testing.T) {
 		assert.Panics(
 			t,
@@ -50,12 +51,13 @@ func TestNone_Value(t *testing.T) {
 		)
 	})
 	t.Run("with reason", func(t *testing.T) {
-		err := errors.New("because I want so")
 		assert.PanicsWithError(
 			t,
-			errors.Join(option.ErrNoValue, err).Error(),
+			"because I want so",
 			func() {
-				option.NewNoneReason[any](err).Value()
+				option.NewNoneReason[any](
+					errors.New("because I want so"),
+				).Value()
 			},
 			"Value must panic with the error passed as reason",
 		)
