@@ -22,8 +22,12 @@
 
 package option
 
+import "fmt"
+
 // Option is an optional value.
 type Option[T any] interface {
+	fmt.Stringer
+
 	// Present returns true in case it contains a value.
 	Present() bool
 

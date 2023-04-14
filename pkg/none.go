@@ -54,3 +54,7 @@ func (n None[T]) Value() (_ T) {
 		panic(ErrNoValue)
 	}
 }
+
+func (n None[T]) String() string {
+	return "[nothing]"
+}
