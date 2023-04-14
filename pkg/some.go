@@ -22,6 +22,8 @@
 
 package option
 
+import "fmt"
+
 // Some is an Option with some value.
 type Some[T any] struct {
 	value *T
@@ -38,4 +40,8 @@ func (s Some[T]) Present() bool {
 
 func (s Some[T]) Value() T {
 	return *s.value
+}
+
+func (s Some[T]) String() string {
+	return fmt.Sprintf("Some(%v)", s.Value())
 }
